@@ -113,7 +113,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="absolute bottom-0 w-full bg-white bg-opacity-5 border-t border-white border-opacity-10">
+      <footer className="absolute bottom-0 w-full bg-white bg-opacity-10 border-t border-white border-opacity-20">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col items-center gap-3">
             <img
@@ -121,7 +121,9 @@ export default function Home() {
               alt="Logo Universitas Muhammadiyah Yogyakarta"
               className="h-10 object-contain"
             />
-            <p className="text-white text-xs">FIRIDA developed by <span className="font-semibold">Aghnalibrium Consultant</span></p>
+            <p className="text-white text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+              FIRIDA developed by <span className="font-semibold">Aghnalibrium Consultant</span>
+            </p>
           </div>
         </div>
       </footer>
