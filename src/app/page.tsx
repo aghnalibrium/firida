@@ -58,11 +58,12 @@ export default function Home() {
       {/* Hero Section */}
       <main className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center text-white">
-          <div className="flex justify-center items-center gap-8 mb-8">
+          <div className="flex justify-center items-center gap-12 mb-8">
             <img
               src="/logo-umy.png"
               alt="Logo Universitas Muhammadiyah Yogyakarta"
-              className="w-24 h-24 drop-shadow-2xl"
+              className="w-28 h-28 object-contain drop-shadow-2xl"
+              style={{ mixBlendMode: 'multiply' }}
             />
             <Logo className="w-32 h-32 drop-shadow-2xl" />
           </div>
@@ -115,19 +116,20 @@ export default function Home() {
       {/* Footer */}
       <footer className="absolute bottom-0 w-full bg-white bg-opacity-5 border-t border-white border-opacity-10">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col items-center gap-3">
+            <div className="flex items-center gap-3">
               <img
                 src="/logo-umy.png"
                 alt="Logo Universitas Muhammadiyah Yogyakarta"
-                className="w-12 h-12"
+                className="w-10 h-10 object-contain"
+                style={{ mixBlendMode: 'multiply' }}
               />
-              <div className="text-white text-center">
-                <p className="font-semibold">Universitas Muhammadiyah Yogyakarta</p>
+              <div className="text-white">
+                <p className="font-semibold text-sm">Universitas Muhammadiyah Yogyakarta</p>
                 <p className="text-xs text-blue-100">Kampus Terpadu UMY</p>
               </div>
             </div>
-            <p className="text-white text-sm">&copy; 2026 FIRIDA - Clinic Financial Management System</p>
+            <p className="text-white text-xs">FIRIDA developed by <span className="font-semibold">Aghnalibrium Consultant</span></p>
           </div>
         </div>
       </footer>
