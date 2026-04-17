@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+*.db
+*.db-journal
+node_modules
+.next
+.DS_Store
