@@ -60,7 +60,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center text-white">
           <div className="flex justify-center items-center gap-8 mb-8">
             <img
-              src="/logo-umy.svg"
+              src="/logo-umy.png"
               alt="Logo Universitas Muhammadiyah Yogyakarta"
               className="w-24 h-24 drop-shadow-2xl"
             />
@@ -118,7 +118,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-4">
               <img
-                src="/logo-umy.svg"
+                src="/logo-umy.png"
                 alt="Logo Universitas Muhammadiyah Yogyakarta"
                 className="w-12 h-12"
               />
