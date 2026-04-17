@@ -1,0 +1,194 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountCategory {
+  ASSET
+  LIABILITY
+  EQUITY
+  INCOME
+  EXPENSE
+}
+
+enum NormalBalance {
+  DEBIT
+  CREDIT
+}
+
+enum Shift {
+  PAGI
+  SIANG
+  MALAM
+}
+
+enum PaymentMethod {
+  TUNAI
+  TRANSFER
+  QRIS
+}
+
+enum OperationalSourceType {
+  INCOME_DAILY
+  INCOME_OTHER
+  EXPENSE
+  TRANSFER_INTERNAL
+}
+
+model Account {
+  id            String          @id @default(cuid())
+  code          String          @unique
+  name          String
+  category      AccountCategory
+  normalBalance NormalBalance
+  isActive      Boolean         @default(true)
+
+  lines JournalLine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JournalEntry {
+  id         String                @id @default(cuid())
+  date       DateTime
+  memo       String?
+  sourceType OperationalSourceType
+  sourceId   String?
+
+  lines JournalLine[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([sourceType, sourceId])
+}
+
+model JournalLine {
+  id        String @id @default(cuid())
+  entryId   String
+  accountId String
+  debit     Decimal @default(0)
+  credit    Decimal @default(0)
+
+  entry   JournalEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  account Account      @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@index([accountId])
+  @@index([entryId])
+}
+
+model DailyIncome {
+  id            String        @id @default(cuid())
+  date          DateTime
+  shift         Shift
+  patientName   String?
+  paymentMethod PaymentMethod
+  qrisFee       Decimal       @default(0)
+
+  konsultasi    Decimal @default(0)
+  tindakanMedis Decimal @default(0)
+  obat          Decimal @default(0)
+  gigi          Decimal @default(0)
+  antigen       Decimal @default(0)
+
+  memo String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([shift])
+  @@index([paymentMethod])
+}
+
+model OtherIncome {
+  id            String        @id @default(cuid())
+  date          DateTime
+  category      String
+  memo          String?
+  paymentMethod PaymentMethod?
+
+  amount Decimal
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([category])
+}
+
+model Expense {
+  id       String   @id @default(cuid())
+  date     DateTime
+  jenis    String
+  memo     String?
+  amount   Decimal
+  payFrom  String   // account code, e.g. 103 BSI Operasional
+  vendor   String?
+  refNo    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([jenis])
+}
+
+model InternalTransfer {
+  id        String   @id @default(cuid())
+  date      DateTime
+  fromCode  String // e.g. 102
+  toCode    String // e.g. 103
+  amount    Decimal
+  memo      String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([fromCode, toCode])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      String   @default("user") // user, admin
+  isActive  Boolean  @default(true)
+
+  auditLogs AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  action     String // CREATE, UPDATE, DELETE
+  entityType String // DailyIncome, Expense, User, etc.
+  entityId   String?
+  changes    String? // JSON string of changes
+  memo       String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([entityType])
+  @@index([createdAt])
+}
