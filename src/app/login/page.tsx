@@ -123,6 +123,7 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-gray-600">
           <p>&copy; 2026 FIRIDA - Clinic Financial Management</p>
+          <p className="mt-2 text-xs">Developed by <span className="font-semibold text-gray-700">Aghnalibrium Lab</span></p>
         </div>
       </div>
     </div>

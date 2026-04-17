@@ -122,7 +122,7 @@ export default function Home() {
               className="h-10 object-contain"
             />
             <p className="text-white text-xs font-medium" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
-              FIRIDA developed by <span className="font-semibold">Aghnalibrium Consultant</span>
+              FIRIDA developed by <span className="font-semibold">Aghnalibrium Lab</span>
             </p>
           </div>
         </div>
