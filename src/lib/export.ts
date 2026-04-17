@@ -122,7 +122,7 @@ export function exportToPDF(data: FinancialData) {
 
   // Pendapatan
   doc.setFontSize(12)
-  doc.setFont(undefined, 'bold')
+  doc.setFont('helvetica', 'bold')
   doc.text('PENDAPATAN', 14, currentY)
   currentY += 7
 
@@ -137,7 +137,7 @@ export function exportToPDF(data: FinancialData) {
   })
 
   currentY = (doc as any).lastAutoTable.finalY + 2
-  doc.setFont(undefined, 'bold')
+  doc.setFont('helvetica', 'bold')
   doc.text(
     'Total Pendapatan',
     14,
@@ -153,7 +153,7 @@ export function exportToPDF(data: FinancialData) {
   currentY += 10
 
   // Pengeluaran
-  doc.setFont(undefined, 'bold')
+  doc.setFont('helvetica', 'bold')
   doc.text('PENGELUARAN', 14, currentY)
   currentY += 7
 
@@ -168,7 +168,7 @@ export function exportToPDF(data: FinancialData) {
   })
 
   currentY = (doc as any).lastAutoTable.finalY + 2
-  doc.setFont(undefined, 'bold')
+  doc.setFont('helvetica', 'bold')
   doc.text('Total Pengeluaran', 14, currentY)
   doc.text(
     new Intl.NumberFormat('id-ID').format(data.incomeStatement.totalExpense),
@@ -181,7 +181,7 @@ export function exportToPDF(data: FinancialData) {
 
   // Net Income
   doc.setFontSize(14)
-  doc.setFont(undefined, 'bold')
+  doc.setFont('helvetica', 'bold')
   doc.text('LABA/RUGI BERSIH', 14, currentY)
   doc.text(
     new Intl.NumberFormat('id-ID').format(data.incomeStatement.netIncome),

@@ -35,11 +35,13 @@ export default function FinancialReports() {
       const response = await fetch(
         `/api/reports/export?startDate=${startDate}&endDate=${endDate}`
       )
-      const data: FinancialData = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch export data')
+        const errorData = await response.json()
+        throw new Error((errorData as any).error || 'Failed to fetch export data')
       }
+
+      const data: FinancialData = await response.json()
 
       if (format === 'excel') {
         exportToExcel(data)
