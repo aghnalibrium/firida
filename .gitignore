@@ -46,3 +46,6 @@ next-env.d.ts
 # database files
 *.db
 *.db-journal
+
+# old migrations backup
+prisma/migrations_sqlite_backup
