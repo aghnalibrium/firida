@@ -202,7 +202,7 @@ export default function DailyIncomeForm({ onSuccess }: DailyIncomeFormProps) {
             id="konsultasi"
             name="konsultasi"
             min="0"
-            step="1000"
+            step="1"
             value={formData.konsultasi}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -218,7 +218,7 @@ export default function DailyIncomeForm({ onSuccess }: DailyIncomeFormProps) {
             id="tindakanMedis"
             name="tindakanMedis"
             min="0"
-            step="1000"
+            step="1"
             value={formData.tindakanMedis}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -234,7 +234,7 @@ export default function DailyIncomeForm({ onSuccess }: DailyIncomeFormProps) {
             id="obat"
             name="obat"
             min="0"
-            step="1000"
+            step="1"
             value={formData.obat}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -250,7 +250,7 @@ export default function DailyIncomeForm({ onSuccess }: DailyIncomeFormProps) {
             id="gigi"
             name="gigi"
             min="0"
-            step="1000"
+            step="1"
             value={formData.gigi}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -266,7 +266,7 @@ export default function DailyIncomeForm({ onSuccess }: DailyIncomeFormProps) {
             id="antigen"
             name="antigen"
             min="0"
-            step="1000"
+            step="1"
             value={formData.antigen}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
