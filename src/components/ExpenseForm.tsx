@@ -138,21 +138,25 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
           <label htmlFor="jenis" className="block text-sm font-medium text-gray-700 mb-1">
             Jenis Pengeluaran *
           </label>
-          <select
+          <input
+            type="text"
             id="jenis"
             name="jenis"
             required
+            list="jenis-suggestions"
             value={formData.jenis}
             onChange={handleChange}
+            placeholder="Pilih atau ketik jenis pengeluaran baru"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
-          >
-            <option value="">Pilih Jenis</option>
+          />
+          <datalist id="jenis-suggestions">
             {EXPENSE_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
+              <option key={cat} value={cat} />
             ))}
-          </select>
+          </datalist>
+          <p className="mt-1 text-xs text-gray-500">
+            Pilih dari daftar atau ketik jenis pengeluaran baru
+          </p>
         </div>
 
         {/* Pay From */}
@@ -188,7 +192,7 @@ export default function ExpenseForm({ onSuccess }: ExpenseFormProps) {
             name="amount"
             required
             min="0"
-            step="1000"
+            step="1"
             value={formData.amount}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-900"
