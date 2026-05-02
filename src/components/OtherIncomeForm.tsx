@@ -117,21 +117,25 @@ export default function OtherIncomeForm({ onSuccess }: OtherIncomeFormProps) {
           <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
             Kategori *
           </label>
-          <select
+          <input
+            type="text"
             id="category"
             name="category"
             required
+            list="category-suggestions"
             value={formData.category}
             onChange={handleChange}
+            placeholder="Pilih atau ketik kategori baru"
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-          >
-            <option value="">Pilih Kategori</option>
+          />
+          <datalist id="category-suggestions">
             {COMMON_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
+              <option key={cat} value={cat} />
             ))}
-          </select>
+          </datalist>
+          <p className="mt-1 text-xs text-gray-500">
+            Pilih dari daftar atau ketik kategori baru
+          </p>
         </div>
 
         {/* Payment Method */}
@@ -164,7 +168,7 @@ export default function OtherIncomeForm({ onSuccess }: OtherIncomeFormProps) {
             name="amount"
             required
             min="0"
-            step="1000"
+            step="1"
             value={formData.amount}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
