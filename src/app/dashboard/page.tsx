@@ -14,12 +14,13 @@ import Dashboard from '@/components/Dashboard'
 import Logo from '@/components/Logo'
 import AccountForm from '@/components/AccountForm'
 import AccountList from '@/components/AccountList'
+import JournalEntryManager from '@/components/JournalEntryManager'
 import FinancialReports from '@/components/FinancialReports'
 import UserForm from '@/components/UserForm'
 import UserList from '@/components/UserList'
 import AuditLogList from '@/components/AuditLogList'
 
-type TabType = 'dashboard' | 'daily' | 'other' | 'expense' | 'transfer' | 'accounts' | 'reports' | 'users' | 'audit'
+type TabType = 'dashboard' | 'daily' | 'other' | 'expense' | 'transfer' | 'accounts' | 'journal' | 'reports' | 'users' | 'audit'
 
 type User = {
   id: string
@@ -241,6 +242,21 @@ export default function Home() {
 
               <button
                 onClick={() => {
+                  setActiveTab('journal')
+                  setSidebarOpen(false)
+                }}
+                className={`${
+                  activeTab === 'journal'
+                    ? 'bg-purple-50 text-purple-700 border-l-4 border-purple-500'
+                    : 'text-gray-700 hover:bg-gray-50'
+                } w-full text-left px-4 py-3 rounded-r-md font-medium text-sm transition-colors flex items-center gap-3`}
+              >
+                <span>📝</span>
+                Jurnal Umum
+              </button>
+
+              <button
+                onClick={() => {
                   setActiveTab('reports')
                   setSidebarOpen(false)
                 }}
@@ -354,6 +370,8 @@ export default function Home() {
               <AccountList refreshTrigger={accountsRefreshTrigger} />
             </>
           )}
+
+          {activeTab === 'journal' && <JournalEntryManager />}
 
           {activeTab === 'reports' && <FinancialReports />}
 

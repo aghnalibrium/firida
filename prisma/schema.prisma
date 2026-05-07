@@ -44,6 +44,7 @@ enum OperationalSourceType {
   INCOME_OTHER
   EXPENSE
   TRANSFER_INTERNAL
+  MANUAL_JOURNAL
 }
 
 model Account {
