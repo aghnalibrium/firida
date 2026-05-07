@@ -15,13 +15,16 @@ type BalanceSheetData = {
       cashItems: AccountItem[]
       totalCash: number
     }
+    allAssets?: AccountItem[]
     totalAssets: number
   }
   liabilities: {
     currentLiabilities: Record<string, number>
+    allLiabilities?: AccountItem[]
     totalLiabilities: number
   }
   equity: {
+    accounts?: AccountItem[]
     retainedEarnings: AccountItem
     totalEquity: number
   }
@@ -191,6 +194,23 @@ export default function BalanceSheet({ asOfDate }: BalanceSheetProps) {
 
           <div className="ml-4">
             <div className="ml-4 space-y-1 text-sm">
+              {/* Capital/Equity Accounts (from manual journals like "Modal Awal") */}
+              {data.equity.accounts && data.equity.accounts.length > 0 && (
+                <>
+                  {data.equity.accounts.map((account) => (
+                    <div key={account.code} className="flex justify-between">
+                      <span className="text-gray-600">
+                        <span className="font-mono text-xs text-gray-500">{account.code}</span> - {account.name}
+                      </span>
+                      <span className="text-gray-900 font-mono">
+                        {formatCurrency(account.amount)}
+                      </span>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {/* Retained Earnings (accumulated profit/loss) */}
               <div className="flex justify-between">
                 <span className="text-gray-600">
                   <span className="font-mono text-xs text-gray-500">{data.equity.retainedEarnings.code}</span> - {data.equity.retainedEarnings.name}
