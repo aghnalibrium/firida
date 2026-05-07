@@ -6,6 +6,16 @@ const toNumber = (value: any): number => {
   return Number(value) || 0
 }
 
+// Mapping kategori pendapatan ke kode akun standar
+const INCOME_ACCOUNT_CODES = {
+  konsultasi: { code: '4-100', name: 'Pendapatan Konsultasi' },
+  tindakanMedis: { code: '4-200', name: 'Pendapatan Tindakan Medis' },
+  obat: { code: '4-300', name: 'Pendapatan Obat' },
+  gigi: { code: '4-400', name: 'Pendapatan Gigi' },
+  antigen: { code: '4-500', name: 'Pendapatan Antigen' },
+  qrisFee: { code: '5-999', name: 'Biaya QRIS' },
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -57,6 +67,13 @@ export async function GET(request: NextRequest) {
       totalOtherIncome += amount
     })
 
+    // Convert other income to items with account codes
+    const otherIncomeItems = Object.entries(otherIncomeByCategory).map(([category, amount], index) => ({
+      code: `4-${600 + index}`,
+      name: category,
+      amount
+    }))
+
     // Get all expenses
     const expenses = await prisma.expense.findMany({ where })
 
@@ -73,6 +90,13 @@ export async function GET(request: NextRequest) {
       totalExpenses += amount
     })
 
+    // Convert expenses to items with account codes
+    const expenseItems = Object.entries(expensesByCategory).map(([category, amount], index) => ({
+      code: `5-${100 + index}`,
+      name: category,
+      amount
+    }))
+
     // Calculate totals
     const totalRevenue = totalDailyIncome + totalOtherIncome - totalQrisFee
     const netIncome = totalRevenue - totalExpenses
@@ -85,23 +109,49 @@ export async function GET(request: NextRequest) {
       },
       revenue: {
         dailyIncome: {
-          konsultasi: totalKonsultasi,
-          tindakanMedis: totalTindakanMedis,
-          obat: totalObat,
-          gigi: totalGigi,
-          antigen: totalAntigen,
+          items: [
+            {
+              code: INCOME_ACCOUNT_CODES.konsultasi.code,
+              name: INCOME_ACCOUNT_CODES.konsultasi.name,
+              amount: totalKonsultasi
+            },
+            {
+              code: INCOME_ACCOUNT_CODES.tindakanMedis.code,
+              name: INCOME_ACCOUNT_CODES.tindakanMedis.name,
+              amount: totalTindakanMedis
+            },
+            {
+              code: INCOME_ACCOUNT_CODES.obat.code,
+              name: INCOME_ACCOUNT_CODES.obat.name,
+              amount: totalObat
+            },
+            {
+              code: INCOME_ACCOUNT_CODES.gigi.code,
+              name: INCOME_ACCOUNT_CODES.gigi.name,
+              amount: totalGigi
+            },
+            {
+              code: INCOME_ACCOUNT_CODES.antigen.code,
+              name: INCOME_ACCOUNT_CODES.antigen.name,
+              amount: totalAntigen
+            },
+          ],
           subtotal: totalDailyIncome,
         },
         otherIncome: {
-          byCategory: otherIncomeByCategory,
+          items: otherIncomeItems,
           subtotal: totalOtherIncome,
         },
-        qrisFee: totalQrisFee,
+        qrisFee: {
+          code: INCOME_ACCOUNT_CODES.qrisFee.code,
+          name: INCOME_ACCOUNT_CODES.qrisFee.name,
+          amount: totalQrisFee
+        },
         grossProfit,
         totalRevenue,
       },
       expenses: {
-        byCategory: expensesByCategory,
+        items: expenseItems,
         total: totalExpenses,
       },
       netIncome,

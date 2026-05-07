@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from 'react'
 
+type AccountItem = {
+  code: string
+  name: string
+  amount: number
+}
+
 type IncomeStatementData = {
   period: {
     startDate: string | null
@@ -9,23 +15,23 @@ type IncomeStatementData = {
   }
   revenue: {
     dailyIncome: {
-      konsultasi: number
-      tindakanMedis: number
-      obat: number
-      gigi: number
-      antigen: number
+      items: AccountItem[]
       subtotal: number
     }
     otherIncome: {
-      byCategory: Record<string, number>
+      items: AccountItem[]
       subtotal: number
     }
-    qrisFee: number
+    qrisFee: {
+      code: string
+      name: string
+      amount: number
+    }
     grossProfit: number
     totalRevenue: number
   }
   expenses: {
-    byCategory: Record<string, number>
+    items: AccountItem[]
     total: number
   }
   netIncome: number
@@ -118,36 +124,16 @@ export default function IncomeStatement({ startDate, endDate }: IncomeStatementP
           <div className="ml-4 mb-4">
             <p className="font-medium text-gray-700 mb-2">Pendapatan Harian:</p>
             <div className="ml-4 space-y-1 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Konsultasi</span>
-                <span className="text-gray-900 font-mono">
-                  {formatCurrency(data.revenue.dailyIncome.konsultasi)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tindakan Medis</span>
-                <span className="text-gray-900 font-mono">
-                  {formatCurrency(data.revenue.dailyIncome.tindakanMedis)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Obat</span>
-                <span className="text-gray-900 font-mono">
-                  {formatCurrency(data.revenue.dailyIncome.obat)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Gigi</span>
-                <span className="text-gray-900 font-mono">
-                  {formatCurrency(data.revenue.dailyIncome.gigi)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Antigen</span>
-                <span className="text-gray-900 font-mono">
-                  {formatCurrency(data.revenue.dailyIncome.antigen)}
-                </span>
-              </div>
+              {data.revenue.dailyIncome.items.map((item) => (
+                <div key={item.code} className="flex justify-between">
+                  <span className="text-gray-600">
+                    <span className="font-mono text-xs text-gray-500">{item.code}</span> - {item.name}
+                  </span>
+                  <span className="text-gray-900 font-mono">
+                    {formatCurrency(item.amount)}
+                  </span>
+                </div>
+              ))}
               <div className="flex justify-between border-t pt-1 mt-1">
                 <span className="font-medium text-gray-700">Subtotal Pendapatan Harian</span>
                 <span className="text-gray-900 font-mono font-semibold">
@@ -158,14 +144,16 @@ export default function IncomeStatement({ startDate, endDate }: IncomeStatementP
           </div>
 
           {/* Other Income */}
-          {Object.keys(data.revenue.otherIncome.byCategory).length > 0 && (
+          {data.revenue.otherIncome.items.length > 0 && (
             <div className="ml-4 mb-4">
               <p className="font-medium text-gray-700 mb-2">Pendapatan Lain:</p>
               <div className="ml-4 space-y-1 text-sm">
-                {Object.entries(data.revenue.otherIncome.byCategory).map(([category, amount]) => (
-                  <div key={category} className="flex justify-between">
-                    <span className="text-gray-600">{category}</span>
-                    <span className="text-gray-900 font-mono">{formatCurrency(amount)}</span>
+                {data.revenue.otherIncome.items.map((item) => (
+                  <div key={item.code} className="flex justify-between">
+                    <span className="text-gray-600">
+                      <span className="font-mono text-xs text-gray-500">{item.code}</span> - {item.name}
+                    </span>
+                    <span className="text-gray-900 font-mono">{formatCurrency(item.amount)}</span>
                   </div>
                 ))}
                 <div className="flex justify-between border-t pt-1 mt-1">
@@ -179,12 +167,14 @@ export default function IncomeStatement({ startDate, endDate }: IncomeStatementP
           )}
 
           {/* QRIS Fee */}
-          {data.revenue.qrisFee > 0 && (
+          {data.revenue.qrisFee.amount > 0 && (
             <div className="ml-4 mb-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Dikurangi: Biaya QRIS</span>
+                <span className="text-gray-600">
+                  <span className="font-mono text-xs text-gray-500">{data.revenue.qrisFee.code}</span> - Dikurangi: {data.revenue.qrisFee.name}
+                </span>
                 <span className="text-red-600 font-mono">
-                  ({formatCurrency(data.revenue.qrisFee)})
+                  ({formatCurrency(data.revenue.qrisFee.amount)})
                 </span>
               </div>
             </div>
@@ -208,10 +198,12 @@ export default function IncomeStatement({ startDate, endDate }: IncomeStatementP
           </h4>
 
           <div className="ml-4 space-y-1 text-sm">
-            {Object.entries(data.expenses.byCategory).map(([category, amount]) => (
-              <div key={category} className="flex justify-between">
-                <span className="text-gray-600">{category}</span>
-                <span className="text-gray-900 font-mono">{formatCurrency(amount)}</span>
+            {data.expenses.items.map((item) => (
+              <div key={item.code} className="flex justify-between">
+                <span className="text-gray-600">
+                  <span className="font-mono text-xs text-gray-500">{item.code}</span> - {item.name}
+                </span>
+                <span className="text-gray-900 font-mono">{formatCurrency(item.amount)}</span>
               </div>
             ))}
           </div>

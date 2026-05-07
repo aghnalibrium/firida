@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import IncomeStatement from './IncomeStatement'
+import EquityChangeStatement from './EquityChangeStatement'
 import BalanceSheet from './BalanceSheet'
 import CashFlowStatement from './CashFlowStatement'
 import { exportToExcel, exportToPDF, type FinancialData } from '@/lib/export'
 
-type ReportType = 'income' | 'balance' | 'cashflow'
+type ReportType = 'income' | 'equity' | 'balance' | 'cashflow'
 
 export default function FinancialReports() {
   const [activeReport, setActiveReport] = useState<ReportType>('income')
@@ -68,6 +69,16 @@ export default function FinancialReports() {
             }`}
           >
             Laporan Laba Rugi
+          </button>
+          <button
+            onClick={() => setActiveReport('equity')}
+            className={`px-6 py-3 rounded-md font-medium transition-colors ${
+              activeReport === 'equity'
+                ? 'bg-teal-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Perubahan Ekuitas
           </button>
           <button
             onClick={() => setActiveReport('balance')}
@@ -186,6 +197,8 @@ export default function FinancialReports() {
           <p>
             {activeReport === 'balance'
               ? 'Neraca menampilkan posisi keuangan pada tanggal tertentu'
+              : activeReport === 'equity'
+              ? 'Laporan Perubahan Ekuitas menampilkan perubahan modal untuk periode yang dipilih'
               : 'Laporan menampilkan data untuk periode tanggal yang dipilih'}
           </p>
         </div>
@@ -195,6 +208,9 @@ export default function FinancialReports() {
       <div>
         {activeReport === 'income' && (
           <IncomeStatement startDate={startDate} endDate={endDate} />
+        )}
+        {activeReport === 'equity' && (
+          <EquityChangeStatement startDate={startDate} endDate={endDate} />
         )}
         {activeReport === 'balance' && <BalanceSheet asOfDate={asOfDate} />}
         {activeReport === 'cashflow' && (

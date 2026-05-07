@@ -6,6 +6,14 @@ const toNumber = (value: any): number => {
   return Number(value) || 0
 }
 
+// Account code mapping
+const ACCOUNT_CODES = {
+  'Kas Tunai': '1-101',
+  'Bank BNI': '1-102',
+  'Bank BSI': '1-103',
+  'Bank Mandiri': '1-104',
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -92,6 +100,13 @@ export async function GET(request: NextRequest) {
       }
     })
 
+    // Convert cash accounts to items with codes
+    const cashItems = Object.entries(cashAccounts).map(([name, amount]) => ({
+      code: ACCOUNT_CODES[name as keyof typeof ACCOUNT_CODES] || '1-100',
+      name,
+      amount
+    }))
+
     // Calculate total cash
     const totalCash = Object.values(cashAccounts).reduce((sum, val) => sum + val, 0)
 
@@ -124,7 +139,7 @@ export async function GET(request: NextRequest) {
       asOfDate: asOfDate || new Date().toISOString().split('T')[0],
       assets: {
         currentAssets: {
-          cash: cashAccounts,
+          cashItems,
           totalCash,
         },
         totalAssets: totalCash,
@@ -134,7 +149,11 @@ export async function GET(request: NextRequest) {
         totalLiabilities: 0,
       },
       equity: {
-        retainedEarnings,
+        retainedEarnings: {
+          code: '3-100',
+          name: 'Laba Ditahan',
+          amount: retainedEarnings
+        },
         totalEquity,
       },
       // Balance sheet equation check

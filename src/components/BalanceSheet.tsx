@@ -2,11 +2,17 @@
 
 import { useState, useEffect } from 'react'
 
+type AccountItem = {
+  code: string
+  name: string
+  amount: number
+}
+
 type BalanceSheetData = {
   asOfDate: string
   assets: {
     currentAssets: {
-      cash: Record<string, number>
+      cashItems: AccountItem[]
       totalCash: number
     }
     totalAssets: number
@@ -16,7 +22,7 @@ type BalanceSheetData = {
     totalLiabilities: number
   }
   equity: {
-    retainedEarnings: number
+    retainedEarnings: AccountItem
     totalEquity: number
   }
   balanceCheck: {
@@ -111,10 +117,12 @@ export default function BalanceSheet({ asOfDate }: BalanceSheetProps) {
             <div className="ml-4 space-y-1 text-sm">
               <p className="font-medium text-gray-600 mb-1">Kas & Bank (Cash & Bank):</p>
               <div className="ml-4 space-y-1">
-                {Object.entries(data.assets.currentAssets.cash).map(([account, amount]) => (
-                  <div key={account} className="flex justify-between">
-                    <span className="text-gray-600">{account}</span>
-                    <span className="text-gray-900 font-mono">{formatCurrency(amount)}</span>
+                {data.assets.currentAssets.cashItems.map((item) => (
+                  <div key={item.code} className="flex justify-between">
+                    <span className="text-gray-600">
+                      <span className="font-mono text-xs text-gray-500">{item.code}</span> - {item.name}
+                    </span>
+                    <span className="text-gray-900 font-mono">{formatCurrency(item.amount)}</span>
                   </div>
                 ))}
               </div>
@@ -184,9 +192,11 @@ export default function BalanceSheet({ asOfDate }: BalanceSheetProps) {
           <div className="ml-4">
             <div className="ml-4 space-y-1 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Laba Ditahan (Retained Earnings)</span>
+                <span className="text-gray-600">
+                  <span className="font-mono text-xs text-gray-500">{data.equity.retainedEarnings.code}</span> - {data.equity.retainedEarnings.name}
+                </span>
                 <span className="text-gray-900 font-mono">
-                  {formatCurrency(data.equity.retainedEarnings)}
+                  {formatCurrency(data.equity.retainedEarnings.amount)}
                 </span>
               </div>
             </div>
