@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "OperationalSourceType" ADD VALUE IF NOT EXISTS 'MANUAL_JOURNAL';
